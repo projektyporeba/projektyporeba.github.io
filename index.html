@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+   <meta name="author" content="Kamil Bilnik, Krzysztof Lis, Oliwier Majewski, Piotr Mucha">
+   <meta name="keywords" content="słownik, słowa, lotnictwo, zawodowe, technik lotniskowych słóżb operacyjnych, słownik lotniczy, słownik angielski, angielski, angielski zawodowy">
+  <meta name="description" content="Strona ze słownikiem Polsko angielskim i angielsko polskim">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>słownik</title>
+  <link rel="stylesheet" href="style.css">
+  
+</head>
+<body>
+  <div class="container">
+    <h1>Słownik</h1>
+    <input type="text" id="search" placeholder="Wpisz słowo..." autocomplete="off">
+    <div id="suggestions" class="suggestions"></div>
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+ // Wstawiamy dane ręcznie jako pary angielskie-polskie
+const rawWords = `
+precipitation
+opady
+atmospheric pressure
+ciśnienie atmosferyczne
+IFR (Instrument Flight Rules)
+przepisy lotu według wskazań przyrządów
+VFR (Visual Flight Rules)
+przepisy lotu z widocznością
+flight plan
+plan lotu
+route
+trasa
+seek
+szukać
+prevent collisions
+zapobiegać kolizjom
+vertical separation
+pionowa separacja
+lateral separation
+boczna separacja
+longitudinal separation
+wzdłużna separacja
+resposibilities
+obowiązki
+provide
+zapewniać
+airspace safety
+bezpieczeństwo przestrzeni powietrznej
+payload
+ładowność
+restraint
+zabezpieczenie
+payload restraint
+ograniczenie ładowności
+capacity
+pojemność
+concern
+obawa / kwestia
+space concerns
+ograniczenia przestrzenne
+estimate
+oszacować
+Air traffic control facility
+ośrodek kontroli ruchu lotniczego
+review a flight plan
+przeglądać plan lotu
+check completed
+sprawdzenie zakończone
+cockpit check
+kontrola kokpitu
+walk-around
+obchód techniczny
+tire check
+kontrola opon
+surface damage
+uszkodzenia powierzchni
+fan blade
+łopatka wiatraka
+maintenance
+konserwacja
+emergency safety devices
+urządzenia bezpieczeństwa awaryjnego
+wear (n)
+zużycie
+notable
+zauważalny
+bent
+wygięty
+cockpit instruments
+przyrządy kokpitu
+assess
+ocenić
+examine
+badać
+log book
+dziennik pokładowy
+external
+zewnętrzny
+scratch
+zadrapanie
+dent
+wgniecenie
+excessive
+nadmierny
+perform a check
+wykonać kontrolę
+replace
+wymienić
+nose wheel
+przednie koło
+flat
+przebity (np. opona)
+vent
+wentyl
+piloting
+pilotowanie
+clearance
+zgoda
+include
+zawierać
+draft
+szkic
+taxi
+kołować
+icy conditions
+oblodzenie
+on-blocks / off-blocks
+na / poza stanowiskiem postojowym
+light / lighten up
+lekki / rozjaśnić
+aircraft interior
+wnętrze samolotu
+keep a record
+prowadzić rejestr
+depart
+odlecieć
+tug
+holownik
+device
+urządzenie
+tow
+holować
+airport markings
+oznaczenia lotniskowe
+consider
+brać pod uwagę
+fuel efficiency
+efektywność paliwowa
+slush
+błoto pośniegowe
+assign
+przydzielić
+gust
+podmuch
+runway assignment
+przydział pasa startowego
+hail
+grad
+holding point
+punkt oczekiwania
+cloud cover
+pokrywa chmurna
+runway contamination
+zanieczyszczenie pasa
+patchy fog (BCFG)
+miejscowa mgła
+depend on
+zależeć od
+takeoff flight path
+ścieżka startowa
+abort
+przerwać (start)
+altitude
+wysokość
+efficiency
+wydajność
+velocity
+prędkość
+hydroplane
+poślizg wodny (aquaplaning)
+divide
+dzielić
+reach a high altitude
+osiągnąć dużą wysokość
+brake check
+kontrola hamulców
+tiller wheel
+koło sterowne
+sudden burst of wind
+nagły podmuch wiatru
+commit to takeoff
+zdecydować się na start
+take into account
+brać pod uwagę
+inoperative
+niesprawny
+achieve
+osiągnąć
+retract gear
+schować podwozie
+gear retraction
+chowanie podwozia
+reach V1
+osiągnąć V1
+generate lift
+wytworzyć siłę nośną
+engine failure
+awaria silnika
+negative
+odmowa
+Slat
+Skrzela
+Turboprop
+silnik turbośmigłowy
+turbine engine
+silnik turbinowy
+transreciver
+urządzenie nadawczo-odbiorcze
+runway surface
+nawierzchnia pasa
+Turn coordinator
+zakrętomierz
+airspeed indicator
+prędkościomierz
+squelch
+tłumić szum
+serious malfunction
+poważna usterka
+runway length
+długość pasa
+wing flaps settings
+ustawienia klap
+initial
+początkowy
+crew
+załoga
+state
+stwierdzić
+clearly state
+jasno określić
+location
+lokalizacja
+frequency change
+zmiana częstotliwości
+follow radio frequency changes
+przestrzegać zmian częstotliwości
+specific
+konkretny
+enter a runway
+wjechać na pas
+clarification
+doprecyzowanie
+Air traffic control facility
+placówka kontroli ruchu lotniczego
+Applicant
+kandydat
+Longitudinal separation
+separacja podłużna
+Maintain
+utrzymywać
+Update (v)
+aktualizować
+Weather updates
+aktualizacje pogodowe
+Predict
+przewidywać
+Visibility
+widoczność
+Weather fronts
+fronty atmosferyczne
+VMC (Visual Meteorological Conditions)
+warunki meteorologiczne do lotu z
+widocznością
+IMC (Instrument Meteorological Conditions)
+warunki meteorologiczne do lotu
+według przyrządów
+IFR (Instrument Flight Rules)
+przepisy lotów według wskazań przyrządów
+VFR (Visual Flight Rules)
+przepisy lotów z widocznością
+Atmospheric pressure
+ciśnienie atmosferyczne
+Meteorology
+meteorologia
+Encounter
+napotkać (np. turbulencje)
+Airway
+droga lotnicza
+Burn-off
+spalanie paliwa
+Departure point
+punkt odlotu
+Weather delays
+opóźnienia spowodowane pogodą
+Emergency
+sytuacja zagrażająca życiu lub zdrowiu
+Review a flight plan
+przejrzeć plan lotu
+Cockpit check
+kontrola kokpitu
+Tire check
+kontrola opon
+Fan blade
+łopatka wentylatora/turbiny
+Emergency safety devices
+urządzenia bezpieczeństwa awaryjnego
+Wear (n)
+zużycie
+Bent
+wygięty
+equvalent airspeed
+równoważna prędkość samolotu
+logitudinal separation 
+separacja wzdłuż osi podłużnej
+true airspeed
+rzeczywista prędkość samolotu
+calibrated air speed
+skalibrowana prędkość samolotu
+Emergency equipment
+wyposażenie awaryjne
+Examine
+badać/sprawdzać
+External
+zewnętrzny
+Dent
+wgniecenie
+Perform a check
+wykonać kontrolę
+Nose wheel
+koło przednie
+Vent
+otwór wentylacyjny
+Clearance
+zezwolenie
+Advisory
+ostrzeżenie/informacja doradcza
+Taxi
+kołować
+On-blocks
+na blokach (postój samolotu przy bramce)
+Light
+światło
+Incorrect
+niepoprawny
+Aircraft interior
+wnętrze samolotu
+Seek
+poszukiwać
+Vertical separation
+separacja pionowa
+Advisory
+ostrzeżenie/informacja (powtórzone słowo)
+Purpose
+cel
+Up-to-date
+aktualny
+Weather forecast
+prognoza pogody
+Precipitation
+opady
+Wind speed
+prędkość wiatru
+Destination
+miejsce docelowe
+I
+ m relieved
+czuję ulgę
+Constantly
+stale/ciągle
+Capacity
+pojemność/ładowność
+Airways routing
+trasa drogami powietrznymi
+Due to
+z powodu
+Arrival point
+punkt przylotu
+Increase
+zwiększyć
+Estimate
+oszacować
+Check completed
+kontrola zakończona
+Walk-around
+obchód (wizualna inspekcja samolotu)
+Surface damage
+uszkodzenie powierzchni
+Maintenance
+konserwacja/obsługa techniczna
+Significant
+znaczący
+Lateral separation
+separacja boczna
+Provide
+dostarczyć/zapewnić
+Found
+znaleziony
+Notable
+zauważalny
+Cockpit instruments
+przyrządy w kokpicie
+Assess
+ocenić
+Log book
+dziennik pokładowy
+Scratch
+zadrapanie
+Excessive
+nadmierny
+Replace
+wymienić
+Flat
+spłaszczony (np. flaka
+przebita opona)
+Piloting
+pilotowanie
+Include
+zawierać
+Draft
+szkic/projekt
+Icy conditions
+oblodzone warunki
+Off-blocks
+zejście z bloków (rozpoczęcie kołowania)
+Lighten up
+odciążyć
+Vent
+(powtórzone) otwór wentylacyjny
+Maintance
+Konserwacja
+`.trim().split('\n');
+
+const dictionary = {};
+const wordList = [];
+
+for (let i = 0; i < rawWords.length; i += 2) {
+  const eng = rawWords[i].trim();
+  const pol = rawWords[i + 1]?.trim();
+  if (eng && pol) {
+    dictionary[eng.toLowerCase()] = pol;
+    dictionary[pol.toLowerCase()] = eng;
+    wordList.push(eng, pol);
+  }
+}
+
+const input = document.getElementById('search');
+const suggestions = document.getElementById('suggestions');
+const result = document.getElementById('result');
+
+input.addEventListener('input', () => {
+  const val = input.value.toLowerCase();
+  suggestions.innerHTML = '';
+  if (val.length < 1) return;
+
+  const matches = wordList.filter(word => word.toLowerCase().startsWith(val)).slice(0, 10);
+  matches.forEach(match => {
+    const div = document.createElement('div');
+    div.textContent = match;
+    div.addEventListener('click', () => {
+      input.value = match;
+      showTranslation(match.toLowerCase());
+      suggestions.innerHTML = '';
+    });
+    suggestions.appendChild(div);
+  });
+});
+
+input.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    showTranslation(input.value.toLowerCase());
+    suggestions.innerHTML = '';
+  }
+});
+
+function showTranslation(word) {
+  const translation = dictionary[word];
+  if (translation) {
+    result.innerHTML = `<strong>${word}</strong> → <strong>${translation}</strong>`;
+  } else {
+    result.textContent = "Nie znaleziono tłumaczenia.";
+  }
+}
+
+  </script>
+</body>
+</html>
