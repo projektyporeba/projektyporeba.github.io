@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-   <meta name="author" content="Kamil Bilnik, Krzysztof Lis, Oliwier Majewski, Piotr Mucha">
+   <meta name="author" content="Kamil Bilnik, Krzysztof Lis, Oliwier Majewski, Piotr Mucha, Kamil Grabowski">
    <meta name="keywords" content="słownik, słowa, lotnictwo, zawodowe, technik lotniskowych słóżb operacyjnych, słownik lotniczy, słownik angielski, angielski, angielski zawodowy">
   <meta name="description" content="Strona ze słownikiem Polsko angielskim i angielsko polskim">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,14 +11,23 @@
   
 </head>
 <body>
+  <div class="themetoggle">
+    <button id="toggleTheme">Zmień motyw</button>
+  </div>
+
   <div class="container">
     <h1>Słownik</h1>
     <input type="text" id="search" placeholder="Wpisz słowo..." autocomplete="off">
     <div id="suggestions" class="suggestions"></div>
     <div id="result" class="result"></div>
   </div>
+  <script>
 
-<script>
+    const toggleBtn = document.getElementById('toggleTheme');
+toggleBtn.addEventListener('click', () => {
+  document.body.classList.toggle('dark');
+});
+
  // Wstawiamy dane ręcznie jako pary angielskie-polskie
 const rawWords = `
 thrust
@@ -442,7 +451,7 @@ Wind speed
 prędkość wiatru
 Destination
 miejsce docelowe
-Im relieved
+I'm relieved
 czuję ulgę
 Constantly
 stale/ciągle
@@ -557,9 +566,8 @@ function showTranslation(word) {
     result.innerHTML = `<strong>${word}</strong> → <strong>${translation}</strong>`;
   } else {
     result.textContent = "Nie znaleziono tłumaczenia.";
-  }
+    }
 }
-
-  </script>
+</script>
 </body>
 </html>
